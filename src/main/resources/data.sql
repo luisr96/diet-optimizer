@@ -1,0 +1,2 @@
+INSERT INTO public.food (calories, carbs, fats, name, price, protein, servings, meal_type_id, vendor_id)
+VALUES (200, 38, 5, 'Nature''s Bakery Fig Bar, Variety Pack, 2 oz, 40-count', 19.99, 3, 40, 4, 1);
