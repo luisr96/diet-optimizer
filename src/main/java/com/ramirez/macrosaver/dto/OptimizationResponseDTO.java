@@ -10,9 +10,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OptimizationResponseDTO {
-    private List<OptimizationResultDTO> foods;
     private double totalProtein;
     private double totalCarbs;
     private double totalFats;
     private double totalCalories;
+    private double totalPrice;
+    private List<OptimizationResultDTO> foods;
 }

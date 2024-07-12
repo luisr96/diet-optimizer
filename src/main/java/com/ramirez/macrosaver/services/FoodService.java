@@ -99,7 +99,7 @@ public class FoodService {
             solution = solver.optimize(objectiveFunction, constraintSet, GoalType.MINIMIZE, new NonNegativeConstraint(true));
         } catch (NoFeasibleSolutionException e) {
             System.out.println("No feasible solution found.");
-            return new OptimizationResponseDTO(new ArrayList<>(), 0, 0, 0, 0);
+            return new OptimizationResponseDTO(0, 0, 0, 0, 0, new ArrayList<>());
         }
 
         return calculateTotals(solution, foodItems);
@@ -118,6 +118,7 @@ public class FoodService {
         double totalCarbs = 0.0;
         double totalFats = 0.0;
         double totalCalories = 0.0;
+        double totalPrice = 0.0;
 
         if (solution != null) {
             double[] selectedQuantities = solution.getPoint();
@@ -129,6 +130,7 @@ public class FoodService {
                 totalCarbs += foodItems.get(i).getCarbs() * servings;
                 totalFats += foodItems.get(i).getFats() * servings;
                 totalCalories += foodItems.get(i).getCalories() * servings;
+                totalPrice += foodItems.get(i).getPrice() * servings;
             }
         }
 
@@ -138,7 +140,8 @@ public class FoodService {
         totalCarbs = Double.parseDouble(df.format(totalCarbs));
         totalFats = Double.parseDouble(df.format(totalFats));
         totalCalories = Double.parseDouble(df.format(totalCalories));
+        totalPrice = Double.parseDouble(df.format(totalPrice));
 
-        return new OptimizationResponseDTO(result, totalProtein, totalCarbs, totalFats, totalCalories);
+        return new OptimizationResponseDTO(totalProtein, totalCarbs, totalFats, totalCalories, totalPrice, result);
     }
 }
