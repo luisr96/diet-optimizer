@@ -41,7 +41,7 @@ public class FoodService {
         return foodRepository.findByPriceLessThanEqual(price);
     }
 
-    public OptimizationResponseDTO optimizeFoodSelection(int targetCalories, int caloricTolerance) {
+    public OptimizationResponseDTO optimizeFoodSelection(int targetCalories, int lowerBound, int upperBound) {
         List<FoodItemDTO> foodItems = List.of(
                 new FoodItemDTO("Apple", 52, 0.3, 14, 0.2, 0.50, 0.03, 1, 10),
                 new FoodItemDTO("Banana", 89, 1.1, 23, 0.3, 0.30, 0.11, 1, 12),
@@ -73,8 +73,8 @@ public class FoodService {
 
         // Constraints for nutritional requirements
         Collection<LinearConstraint> constraints = new ArrayList<>();
-        constraints.add(new LinearConstraint(foodItems.stream().mapToDouble(FoodItemDTO::getCalories).toArray(), Relationship.GEQ, targetCalories - caloricTolerance)); // Lower bound
-        constraints.add(new LinearConstraint(foodItems.stream().mapToDouble(FoodItemDTO::getCalories).toArray(), Relationship.LEQ, targetCalories + caloricTolerance)); // Upper bound
+        constraints.add(new LinearConstraint(foodItems.stream().mapToDouble(FoodItemDTO::getCalories).toArray(), Relationship.GEQ, targetCalories - lowerBound)); // Lower bound
+        constraints.add(new LinearConstraint(foodItems.stream().mapToDouble(FoodItemDTO::getCalories).toArray(), Relationship.LEQ, targetCalories + upperBound)); // Upper bound
 
         constraints.add(new LinearConstraint(foodItems.stream().mapToDouble(FoodItemDTO::getProtein).toArray(), Relationship.GEQ, macroSplit[0]));
         constraints.add(new LinearConstraint(foodItems.stream().mapToDouble(FoodItemDTO::getCarbs).toArray(), Relationship.GEQ, macroSplit[1]));

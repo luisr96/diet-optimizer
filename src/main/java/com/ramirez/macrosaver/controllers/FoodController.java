@@ -34,9 +34,10 @@ public class FoodController {
     @GetMapping("/optimize")
     public ResponseEntity<OptimizationResponseDTO> optimizeFood(
             @RequestParam int calories,
-            @RequestParam(defaultValue = "100") int tolerance
+            @RequestParam(defaultValue = "100") int lowerBound,
+            @RequestParam(defaultValue = "0") int upperBound
     ) {
-        OptimizationResponseDTO result = foodService.optimizeFoodSelection(calories, tolerance);
+        OptimizationResponseDTO result = foodService.optimizeFoodSelection(calories, lowerBound, upperBound);
         return ResponseEntity.ok(result);
     }
 }
