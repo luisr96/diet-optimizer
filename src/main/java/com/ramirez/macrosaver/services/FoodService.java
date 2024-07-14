@@ -144,6 +144,8 @@ public class FoodService {
         totalCalories = roundDouble(totalCalories);
         totalPrice = roundDouble(totalPrice);
 
+        result.sort((o1, o2) -> Double.compare(o2.getServings(), o1.getServings()));
+
         return new OptimizationResponseDTO(totalProtein, totalCarbs, totalFats, totalCalories, totalPrice, result);
     }
 
