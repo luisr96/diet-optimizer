@@ -15,11 +15,17 @@ public class Food {
     private Long id;
     private String name;
     private Integer servings;
+
+    private Double price;
+
     private Integer calories;
     private Integer protein;
     private Integer carbs;
     private Integer fats;
-    private Double price;
+
+    private Double saturatedFat;
+    private Double sodium;
+    private Double addedSugars;
 
     @ManyToOne
     @JoinColumn(name = "meal_type_id")

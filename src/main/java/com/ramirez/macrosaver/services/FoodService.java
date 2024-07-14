@@ -42,51 +42,30 @@ public class FoodService {
     }
 
     public OptimizationResponseDTO optimizeFoodSelection(int targetCalories, int lowerBound, int upperBound) {
-        List<FoodItemDTO> foodItems = List.of(
-                new FoodItemDTO("Apple", 52, 0.3, 14, 0.2, 0.50, 0.03, 1, 10),
-                new FoodItemDTO("Banana", 89, 1.1, 23, 0.3, 0.30, 0.11, 1, 12),
-                new FoodItemDTO("Chicken Breast", 165, 31, 0, 3.6, 3.00, 1.02, 70, 0),
-                new FoodItemDTO("Broccoli", 34, 2.8, 7, 0.4, 0.80, 0.04, 33, 1),
-                new FoodItemDTO("Almonds", 579, 21, 22, 49, 1.50, 4.59, 1, 4),
-                new FoodItemDTO("Oatmeal", 68, 2.4, 12, 1.4, 0.20, 0.24, 2, 0),
-                new FoodItemDTO("Eggs", 155, 13, 1.1, 11, 0.20, 3.31, 124, 0),
-                new FoodItemDTO("Salmon", 208, 20, 0, 13, 10.00, 3.1, 75, 0),
-                new FoodItemDTO("Spinach", 23, 2.9, 3.6, 0.4, 0.50, 0.07, 79, 0),
-                new FoodItemDTO("Sweet Potato", 86, 1.6, 20, 0.1, 0.60, 0.02, 72, 6),
-                new FoodItemDTO("Quinoa", 120, 4.1, 21, 1.9, 0.90, 0.23, 5, 1),
-                new FoodItemDTO("Greek Yogurt", 59, 10, 3.6, 0.4, 1.20, 0.19, 36, 7),
-                new FoodItemDTO("Blueberries", 57, 0.7, 14, 0.3, 0.40, 0.03, 1, 10),
-                new FoodItemDTO("Brown Rice", 123, 2.6, 25, 1, 0.50, 0.14, 2, 0),
-                new FoodItemDTO("Avocado", 160, 2, 9, 15, 1.50, 2.13, 7, 0),
-                new FoodItemDTO("Carrots", 41, 0.9, 10, 0.2, 0.30, 0.03, 69, 5),
-                new FoodItemDTO("Lentils", 116, 9, 20, 0.4, 0.80, 0.05, 2, 0),
-                new FoodItemDTO("Turkey", 135, 30, 0, 1, 3.00, 0.45, 10, 0),
-                new FoodItemDTO("Walnuts", 654, 15, 14, 65, 1.50, 6.13, 2, 1),
-                new FoodItemDTO("Orange", 47, 0.9, 12, 0.1, 0.50, 0.02, 1, 9)
-        );
+        List<FoodItemDTO> foodItems = foodRepository.findAllNormalized();
+        List<FoodItemDTO> normalizedFoodItems = normalizeToOneServing(foodItems);
 
         // Objective function: minimize price
-        double[] costCoefficients = foodItems.stream().mapToDouble(FoodItemDTO::getPrice).toArray();
+        double[] costCoefficients = normalizedFoodItems.stream().mapToDouble(FoodItemDTO::getPrice).toArray();
         LinearObjectiveFunction objectiveFunction = new LinearObjectiveFunction(costCoefficients, 0);
-
-        int[] macroSplit = getMacrosFromCalories(targetCalories);
 
         // Constraints for nutritional requirements
         Collection<LinearConstraint> constraints = new ArrayList<>();
-        constraints.add(new LinearConstraint(foodItems.stream().mapToDouble(FoodItemDTO::getCalories).toArray(), Relationship.GEQ, targetCalories - lowerBound)); // Lower bound
-        constraints.add(new LinearConstraint(foodItems.stream().mapToDouble(FoodItemDTO::getCalories).toArray(), Relationship.LEQ, targetCalories + upperBound)); // Upper bound
+        constraints.add(new LinearConstraint(normalizedFoodItems.stream().mapToDouble(FoodItemDTO::getCalories).toArray(), Relationship.GEQ, targetCalories - lowerBound)); // Lower bound
+        constraints.add(new LinearConstraint(normalizedFoodItems.stream().mapToDouble(FoodItemDTO::getCalories).toArray(), Relationship.LEQ, targetCalories + upperBound)); // Upper bound
 
-        constraints.add(new LinearConstraint(foodItems.stream().mapToDouble(FoodItemDTO::getProtein).toArray(), Relationship.GEQ, macroSplit[0]));
-        constraints.add(new LinearConstraint(foodItems.stream().mapToDouble(FoodItemDTO::getCarbs).toArray(), Relationship.GEQ, macroSplit[1]));
-        constraints.add(new LinearConstraint(foodItems.stream().mapToDouble(FoodItemDTO::getFats).toArray(), Relationship.GEQ, macroSplit[2]));
+        int[] macroSplit = getMacrosFromCalories(targetCalories);
+        constraints.add(new LinearConstraint(normalizedFoodItems.stream().mapToDouble(FoodItemDTO::getProtein).toArray(), Relationship.GEQ, macroSplit[0]));
+        constraints.add(new LinearConstraint(normalizedFoodItems.stream().mapToDouble(FoodItemDTO::getCarbs).toArray(), Relationship.GEQ, macroSplit[1]));
+        constraints.add(new LinearConstraint(normalizedFoodItems.stream().mapToDouble(FoodItemDTO::getFats).toArray(), Relationship.GEQ, macroSplit[2]));
 
-        constraints.add(new LinearConstraint(foodItems.stream().mapToDouble(FoodItemDTO::getSaturatedFat).toArray(), Relationship.LEQ, targetCalories * 0.10));
-        constraints.add(new LinearConstraint(foodItems.stream().mapToDouble(FoodItemDTO::getSodium).toArray(), Relationship.LEQ, MAX_SODIUM_MG));
-        constraints.add(new LinearConstraint(foodItems.stream().mapToDouble(FoodItemDTO::getAddedSugars).toArray(), Relationship.LEQ, MAX_ADDED_SUGARS_G));
+        constraints.add(new LinearConstraint(normalizedFoodItems.stream().mapToDouble(FoodItemDTO::getSaturatedFat).toArray(), Relationship.LEQ, targetCalories * 0.10));
+        constraints.add(new LinearConstraint(normalizedFoodItems.stream().mapToDouble(FoodItemDTO::getSodium).toArray(), Relationship.LEQ, MAX_SODIUM_MG));
+        constraints.add(new LinearConstraint(normalizedFoodItems.stream().mapToDouble(FoodItemDTO::getAddedSugars).toArray(), Relationship.LEQ, MAX_ADDED_SUGARS_G));
 
         // Maximum servings for each food item
-        for (int i = 0; i < foodItems.size(); i++) {
-            double[] servingConstraint = new double[foodItems.size()];
+        for (int i = 0; i < normalizedFoodItems.size(); i++) {
+            double[] servingConstraint = new double[normalizedFoodItems.size()];
             servingConstraint[i] = 1.0;
             constraints.add(new LinearConstraint(servingConstraint, Relationship.LEQ, MAX_SERVINGS));
         }
@@ -98,11 +77,34 @@ public class FoodService {
         try {
             solution = solver.optimize(objectiveFunction, constraintSet, GoalType.MINIMIZE, new NonNegativeConstraint(true));
         } catch (NoFeasibleSolutionException e) {
-            System.out.println("No feasible solution found.");
-            return new OptimizationResponseDTO(0, 0, 0, 0, 0, new ArrayList<>());
+            throw new NoFeasibleSolutionException();
         }
 
-        return calculateTotals(solution, foodItems);
+        return calculateTotals(solution, normalizedFoodItems);
+    }
+
+    private List<FoodItemDTO> normalizeToOneServing(List<FoodItemDTO> foodItems) {
+        List<FoodItemDTO> normalizedItems = new ArrayList<>();
+
+        for (FoodItemDTO item : foodItems) {
+            if (item.getServings() != null && item.getServings() != 0) {
+                FoodItemDTO normalizedItem = new FoodItemDTO(
+                        item.getName(),
+                        1, // Always normalize to 1 serving
+                        item.getPrice() / item.getServings(),
+                        item.getCalories() / item.getServings(),
+                        item.getProtein() / item.getServings(),
+                        item.getCarbs() / item.getServings(),
+                        item.getFats() / item.getServings(),
+                        item.getSaturatedFat() / item.getServings(),
+                        item.getSodium() / item.getServings(),
+                        item.getAddedSugars() / item.getServings()
+                );
+                normalizedItems.add(normalizedItem);
+            }
+        }
+
+        return normalizedItems;
     }
 
     private int[] getMacrosFromCalories(int calories) {
@@ -113,6 +115,10 @@ public class FoodService {
     }
 
     private OptimizationResponseDTO calculateTotals(PointValuePair solution, List<FoodItemDTO> foodItems) {
+        if (solution == null) {
+            throw new NoFeasibleSolutionException();
+        }
+
         List<OptimizationResultDTO> result = new ArrayList<>();
         double totalProtein = 0.0;
         double totalCarbs = 0.0;
@@ -120,28 +126,29 @@ public class FoodService {
         double totalCalories = 0.0;
         double totalPrice = 0.0;
 
-        if (solution != null) {
-            double[] selectedQuantities = solution.getPoint();
-            for (int i = 0; i < foodItems.size(); i++) {
-                double servings = selectedQuantities[i];
-                result.add(new OptimizationResultDTO(foodItems.get(i).getName(), servings));
+        double[] selectedQuantities = solution.getPoint();
+        for (int i = 0; i < foodItems.size(); i++) {
+            double servings = selectedQuantities[i];
+            result.add(new OptimizationResultDTO(foodItems.get(i).getName(), servings));
 
-                totalProtein += foodItems.get(i).getProtein() * servings;
-                totalCarbs += foodItems.get(i).getCarbs() * servings;
-                totalFats += foodItems.get(i).getFats() * servings;
-                totalCalories += foodItems.get(i).getCalories() * servings;
-                totalPrice += foodItems.get(i).getPrice() * servings;
-            }
+            totalProtein += foodItems.get(i).getProtein() * servings;
+            totalCarbs += foodItems.get(i).getCarbs() * servings;
+            totalFats += foodItems.get(i).getFats() * servings;
+            totalCalories += foodItems.get(i).getCalories() * servings;
+            totalPrice += foodItems.get(i).getPrice() * servings;
         }
 
-        // Round totals to 2 decimal places
-        DecimalFormat df = new DecimalFormat("#.##");
-        totalProtein = Double.parseDouble(df.format(totalProtein));
-        totalCarbs = Double.parseDouble(df.format(totalCarbs));
-        totalFats = Double.parseDouble(df.format(totalFats));
-        totalCalories = Double.parseDouble(df.format(totalCalories));
-        totalPrice = Double.parseDouble(df.format(totalPrice));
+        totalProtein = roundDouble(totalProtein);
+        totalCarbs = roundDouble(totalCarbs);
+        totalFats = roundDouble(totalFats);
+        totalCalories = roundDouble(totalCalories);
+        totalPrice = roundDouble(totalPrice);
 
         return new OptimizationResponseDTO(totalProtein, totalCarbs, totalFats, totalCalories, totalPrice, result);
+    }
+
+    private Double roundDouble(Double value) {
+        DecimalFormat df = new DecimalFormat("#.##");
+        return Double.parseDouble(df.format(value));
     }
 }

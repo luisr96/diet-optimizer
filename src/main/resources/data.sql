@@ -1,2 +1,26 @@
-INSERT INTO public.food (calories, carbs, fats, name, price, protein, servings, meal_type_id, vendor_id)
-VALUES (200, 38, 5, 'Nature''s Bakery Fig Bar, Variety Pack, 2 oz, 40-count', 19.99, 3, 40, 4, 1);
+-- INSERT INTO public.food (name, servings, price, calories, protein, carbs, fats, saturated_fat, sodium, added_sugars)
+-- VALUES
+--     ('Chicken Breast', 4, 3.99, 165, 31.02, 0, 3.6, 1, 74, 0),
+--     ('Greek Yogurt (Plain, Non-Fat)', 1, 1.79, 100, 17, 7, 0, 0, 61, 7),
+--     ('Banana', 1, 0.59, 105, 1.3, 27, 0.4, 0.1, 1, 14),
+--     ('Broccoli', 1, 1.49, 31, 2.6, 6, 0.4, 0.1, 24, 0.7),
+--     ('Ground Beef (90% Lean)', 1, 4.49, 248, 21, 0, 18, 7.2, 78, 0),
+--     ('Brown Rice (Cooked)', 1, 0.99, 218, 5, 46, 1.6, 0.3, 1, 0),
+--     ('Almonds', 1, 2.99, 164, 6, 6, 14, 1, 0, 1),
+--     ('Olive Oil', 1, 5.99, 119, 0, 0, 14, 2, 0, 0),
+--     ('Milk (Whole)', 1, 2.49, 146, 7.7, 11.7, 7.9, 4.6, 98, 12),
+--     ('Cottage Cheese (Low-Fat)', 1, 1.99, 81, 12, 3.4, 1, 0.5, 368, 0);
+
+-- INSERT INTO public.meal_type (name)
+-- VALUES
+--     ('Breakfast'),
+--     ('Lunch'),
+--     ('Dinner'),
+--     ('Snack');
+
+-- INSERT INTO public.vendor (name)
+-- VALUES
+--     ('Amazon'),
+--     ('Walmart'),
+--     ('Target'),
+--     ('Costco');
