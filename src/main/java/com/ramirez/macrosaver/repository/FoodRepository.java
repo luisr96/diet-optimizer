@@ -16,15 +16,15 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
     @Query("SELECT new com.ramirez.macrosaver.dto.FoodItemDTO(" +
             "f.name, " +
             "f.servings, " +
-            "f.price / f.servings, " +
-            "f.calories / f.servings, " +
-            "f.protein / f.servings, " +
-            "f.carbs / f.servings, " +
-            "f.fats / f.servings, " +
-            "f.saturatedFat / f.servings, " +
-            "f.sodium / f.servings, " +
-            "f.addedSugars / f.servings) " +
+            "f.price, " +
+            "f.calories, " +
+            "f.protein, " +
+            "f.carbs, " +
+            "f.fats, " +
+            "f.saturatedFat, " +
+            "f.sodium, " +
+            "f.addedSugars) " +
             "FROM Food f")
-    List<FoodItemDTO> findAllNormalized();
+    List<FoodItemDTO> findAllAsDTO();
 
 }

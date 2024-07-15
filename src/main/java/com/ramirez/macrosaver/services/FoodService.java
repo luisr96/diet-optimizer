@@ -29,7 +29,7 @@ public class FoodService {
     private static final int MAX_SODIUM_MG = 1500;
     private static final int MAX_ADDED_SUGARS_G = 25;
 
-    private static final int MAX_SERVINGS = 3;
+    private static final int MAX_SERVINGS = 2;
 
     private final FoodRepository foodRepository;
 
@@ -42,8 +42,8 @@ public class FoodService {
     }
 
     public OptimizationResponseDTO optimizeFoodSelection(int targetCalories, int lowerBound, int upperBound) {
-        List<FoodItemDTO> foodItems = foodRepository.findAllNormalized();
-        List<FoodItemDTO> normalizedFoodItems = normalizeToOneServing(foodItems);
+        List<FoodItemDTO> foodItems = foodRepository.findAllAsDTO();
+        List<FoodItemDTO> normalizedFoodItems = normalizePrice(foodItems);
 
         // Objective function: minimize price
         double[] costCoefficients = normalizedFoodItems.stream().mapToDouble(FoodItemDTO::getPrice).toArray();
@@ -83,22 +83,22 @@ public class FoodService {
         return calculateTotals(solution, normalizedFoodItems);
     }
 
-    private List<FoodItemDTO> normalizeToOneServing(List<FoodItemDTO> foodItems) {
+    private List<FoodItemDTO> normalizePrice(List<FoodItemDTO> foodItems) {
         List<FoodItemDTO> normalizedItems = new ArrayList<>();
 
         for (FoodItemDTO item : foodItems) {
             if (item.getServings() != null && item.getServings() != 0) {
                 FoodItemDTO normalizedItem = new FoodItemDTO(
                         item.getName(),
-                        1, // Always normalize to 1 serving
+                        1,
                         item.getPrice() / item.getServings(),
-                        item.getCalories() / item.getServings(),
-                        item.getProtein() / item.getServings(),
-                        item.getCarbs() / item.getServings(),
-                        item.getFats() / item.getServings(),
-                        item.getSaturatedFat() / item.getServings(),
-                        item.getSodium() / item.getServings(),
-                        item.getAddedSugars() / item.getServings()
+                        item.getCalories(),
+                        item.getProtein(),
+                        item.getCarbs(),
+                        item.getFats(),
+                        item.getSaturatedFat(),
+                        item.getSodium(),
+                        item.getAddedSugars()
                 );
                 normalizedItems.add(normalizedItem);
             }

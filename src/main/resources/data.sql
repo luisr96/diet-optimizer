@@ -1,15 +1,30 @@
--- INSERT INTO public.food (name, servings, price, calories, protein, carbs, fats, saturated_fat, sodium, added_sugars)
--- VALUES
---     ('Chicken Breast', 4, 3.99, 165, 31.02, 0, 3.6, 1, 74, 0),
---     ('Greek Yogurt (Plain, Non-Fat)', 1, 1.79, 100, 17, 7, 0, 0, 61, 7),
---     ('Banana', 1, 0.59, 105, 1.3, 27, 0.4, 0.1, 1, 14),
---     ('Broccoli', 1, 1.49, 31, 2.6, 6, 0.4, 0.1, 24, 0.7),
---     ('Ground Beef (90% Lean)', 1, 4.49, 248, 21, 0, 18, 7.2, 78, 0),
---     ('Brown Rice (Cooked)', 1, 0.99, 218, 5, 46, 1.6, 0.3, 1, 0),
---     ('Almonds', 1, 2.99, 164, 6, 6, 14, 1, 0, 1),
---     ('Olive Oil', 1, 5.99, 119, 0, 0, 14, 2, 0, 0),
---     ('Milk (Whole)', 1, 2.49, 146, 7.7, 11.7, 7.9, 4.6, 98, 12),
---     ('Cottage Cheese (Low-Fat)', 1, 1.99, 81, 12, 3.4, 1, 0.5, 368, 0);
+-- TRUNCATE TABLE food;
+
+-- INSERT INTO food (name, servings, price, calories, protein, carbs, fats, saturated_fat, sodium, added_sugars, vendor_id)
+-- VALUES  ('Fresh Red Cherries, 2.25 lb Bag', 6.4, 5.56, 87, 1.5, 22.1, 0.3, 0.052, 0, 17.7, 2),
+--         ('All Natural* 80% Lean/20% Fat Ground Beef Chuck, 2.25 lb Tray', 9.0, 10.66, 280, 19, 0, 22, 8, 75, 0, 2),
+--         ('Freshness Guaranteed Fresh Chicken Drumsticks, 5 lb Bag', 13.0, 5.97, 170, 19, 0, 10, 2.5, 160, 0, 2),
+--         ('Freshness Guaranteed Boneless Skinless Chicken Thighs, 2.75 - 4.0 lb Tray', 10.5, 9.92, 160, 19, 0, 10, 3, 75, 0, 2),
+--         ('Great Value Large White Eggs, 12 Count', 12, 2.68, 70, 6, 0, 5, 1.5, 70, 0, 2),
+--         ('Silk Dairy Free, Gluten Free, Original Protein Almond Milk, 59 fl oz Carton', 7, 4.38, 80, 8, 6, 2.5, 0, 150, 5, 2),
+--         ('Great Value Oats & Honey Granola, 11 oz', 6, 2.67, 220, 5, 38, 6, 0.5, 0, 12, 2),
+--         ('Great Value Light Greek Yogurt, Blueberry Nonfat Yogurt, 5.3 oz, 4 Count', 4, 2.58, 80, 13, 10, 0, 0, 40, 0, 2),
+--         ('Great Value Lentils, 4 lb', 52, 5.98, 80, 10, 22, 0, 0, 0, 0, 2),
+--         ('JENNIE-O Fresh Lean Ground Turkey, Fresh Meat, 93% Lean/7% Fat, *All Natural, 16 oz Plastic Tray', 4, 4.42, 170, 22, 0, 8, 2.5, 90, 0, 2),
+--         ('Fresh Whole Russet Potatoes, 5lb bag', 15, 4.18, 110, 2, 26, 0, 0, 0, 0, 2),
+--         ('Fresh Honeycrisp Apples, 3 lb Bag', 7.1, 5.32, 80, 0, 22, 0, 0, 0, 16, 2),
+--         ('Marketside Fresh Organic Bananas, Bunch', 1, 2.08, 90, 1.1, 23.1, 0.3, 0.113, 1.0, 12.35, 2),
+--         ('Boneless, Skinless Chicken Breasts, 4.7-6.1 lb Tray', 19, 12.18, 140, 25, 0, 4, 0, 150, 0, 2),
+--         ('Broccoli Florets, 12 oz', 4, 2.57, 30, 3, 4, 0, 0, 25, 0, 2),
+--         ('Great Value Sliced Almonds, 4 oz', 4, 2.46, 160, 6, 6, 14, 1.0, 0, 0, 2),
+--         ('Quaker Instant Oatmeal, Apple & Cinnamon, 12.1 oz, 8 Packets', 8, 2.87, 160, 4, 33, 2, 0.5, 160, 11, 2),
+--         ('Great Value Frozen Wild Caught Pink Salmon Skin-on Fillets, 2 lb', 8, 10.48, 110, 23, 0, 2, 0.5, 170, 0, 2),
+--         ('Great Value Frozen Wild Caught Pink Salmon Skin-on Fillets, 2 lb', 3.5, 1.98, 20, 2, 3, 0, 0.0, 65, 0.0, 2),
+--         ('Sweet Potatoes Whole Fresh, 3 lb Bag', 10, 2.88, 130, 2, 33, 0, 0.0, 45, 7.0, 2),
+--         ('Great Value Organic Tri-Color Quinoa, 16 oz', 11, 3.46, 160, 6, 28, 2.5, 0, 0, 0, 2),
+--         ('Great Value Blueberries, 16 oz (Frozen)', 3, 2.47, 70, 1, 17, 1, 0, 0, 0, 2),
+--         ('Great Value Natural Brown Long Grain Rice, 32 oz', 20, 1.64, 160, 4, 34, 1.5, 0, 0, 0, 2),
+--         ('Fresh Hass Avocados', 2.5, 0.68, 240, 3, 13, 22, 3.189, 10, 1, 2);
 
 -- INSERT INTO public.meal_type (name)
 -- VALUES
