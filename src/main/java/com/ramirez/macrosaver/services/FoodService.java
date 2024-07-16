@@ -2,7 +2,7 @@ package com.ramirez.macrosaver.services;
 
 import com.ramirez.macrosaver.dto.FoodItemDTO;
 import com.ramirez.macrosaver.dto.OptimizationResponseDTO;
-import com.ramirez.macrosaver.dto.OptimizationResultDTO;
+import com.ramirez.macrosaver.dto.SelectedFoodsDTO;
 import com.ramirez.macrosaver.entity.Food;
 import com.ramirez.macrosaver.repository.FoodRepository;
 import org.apache.commons.math3.optim.PointValuePair;
@@ -124,7 +124,7 @@ public class FoodService {
             throw new NoFeasibleSolutionException();
         }
 
-        List<OptimizationResultDTO> result = new ArrayList<>();
+        List<SelectedFoodsDTO> result = new ArrayList<>();
         BigDecimal totalProtein = BigDecimal.ZERO;
         BigDecimal totalCarbs = BigDecimal.ZERO;
         BigDecimal totalFats = BigDecimal.ZERO;
@@ -135,7 +135,7 @@ public class FoodService {
         for (int i = 0; i < foodItems.size(); i++) {
             System.out.println(foodItems.get(i).getName() + ": " + selectedQuantities[i]);
             BigDecimal servings = BigDecimal.valueOf(selectedQuantities[i]);
-            result.add(new OptimizationResultDTO(foodItems.get(i).getName(), servings.doubleValue()));
+            result.add(new SelectedFoodsDTO(foodItems.get(i).getName(), servings.doubleValue()));
 
             totalProtein = totalProtein.add(BigDecimal.valueOf(foodItems.get(i).getProtein()).multiply(servings));
             totalCarbs = totalCarbs.add(BigDecimal.valueOf(foodItems.get(i).getCarbs()).multiply(servings));
