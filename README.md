@@ -48,6 +48,10 @@ GET https://macro-saver.onrender.com/api/v1/foods/optimize?calories=2300
             "foodName": "Great Value Large White Eggs, 12 Count",
             "servings": 1
         },
+        {
+            "foodName": "Great Value Oats & Honey Granola, 11 oz",
+            "servings": 1
+        },
 ```
 ```http
 GET https://macro-saver.onrender.com/api/v1/foods/optimize?calories=1100&upperBound=300&maxServings=2
