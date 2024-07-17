@@ -1,0 +1,8 @@
+version: '3.8'
+services:
+  app:
+    image: luisr96/macro-saver
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
