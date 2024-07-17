@@ -21,9 +21,9 @@ public class FoodController {
         this.foodService = foodService;
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "Hello, World!";
+    @GetMapping()
+    public List<Food> getAllFoods() {
+        return foodService.getAllFoods();
     }
 
     @GetMapping("/search")

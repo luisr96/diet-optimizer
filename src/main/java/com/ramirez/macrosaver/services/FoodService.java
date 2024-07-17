@@ -160,4 +160,8 @@ public class FoodService {
     private BigDecimal roundBigDecimal(BigDecimal value) {
         return value.setScale(2, RoundingMode.HALF_UP);
     }
+
+    public List<Food> getAllFoods() {
+        return foodRepository.findAll();
+    }
 }
