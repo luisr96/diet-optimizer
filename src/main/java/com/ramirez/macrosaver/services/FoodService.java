@@ -140,8 +140,7 @@ public class FoodService {
 
         double[] selectedQuantities = solution.getPoint();
         for (int i = 0; i < foodItems.size(); i++) {
-            System.out.println(foodItems.get(i).getName() + ": " + selectedQuantities[i]);
-            BigDecimal servings = BigDecimal.valueOf(selectedQuantities[i]);
+            BigDecimal servings = roundBigDecimal(BigDecimal.valueOf(selectedQuantities[i]));
             FoodItemDTO item = foodItems.get(i);
             result.add(new SelectedFoodsDTO(
                     item.getName(),
