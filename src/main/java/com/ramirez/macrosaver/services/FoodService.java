@@ -141,26 +141,28 @@ public class FoodService {
         double[] selectedQuantities = solution.getPoint();
         for (int i = 0; i < foodItems.size(); i++) {
             BigDecimal servings = roundBigDecimal(BigDecimal.valueOf(selectedQuantities[i]));
-            FoodItemDTO item = foodItems.get(i);
-            result.add(new SelectedFoodsDTO(
-                    item.getName(),
-                    servings.doubleValue(),
-                    item.getPrice(),
-                    item.getCalories(),
-                    item.getProtein(),
-                    item.getCarbs(),
-                    item.getFats(),
-                    item.getSaturatedFat(),
-                    item.getSodium(),
-                    item.getAddedSugars(),
-                    item.getVendor()
-            ));
+            if (servings.compareTo(BigDecimal.ZERO) > 0) { // Filter out zero servings
+                FoodItemDTO item = foodItems.get(i);
+                result.add(new SelectedFoodsDTO(
+                        item.getName(),
+                        servings.doubleValue(),
+                        item.getPrice(),
+                        item.getCalories(),
+                        item.getProtein(),
+                        item.getCarbs(),
+                        item.getFats(),
+                        item.getSaturatedFat(),
+                        item.getSodium(),
+                        item.getAddedSugars(),
+                        item.getVendor()
+                ));
 
-            totalProtein = totalProtein.add(BigDecimal.valueOf(item.getProtein()).multiply(servings));
-            totalCarbs = totalCarbs.add(BigDecimal.valueOf(item.getCarbs()).multiply(servings));
-            totalFats = totalFats.add(BigDecimal.valueOf(item.getFats()).multiply(servings));
-            totalCalories = totalCalories.add(BigDecimal.valueOf(item.getCalories()).multiply(servings));
-            totalPrice = totalPrice.add(BigDecimal.valueOf(item.getPrice()).multiply(servings));
+                totalProtein = totalProtein.add(BigDecimal.valueOf(item.getProtein()).multiply(servings));
+                totalCarbs = totalCarbs.add(BigDecimal.valueOf(item.getCarbs()).multiply(servings));
+                totalFats = totalFats.add(BigDecimal.valueOf(item.getFats()).multiply(servings));
+                totalCalories = totalCalories.add(BigDecimal.valueOf(item.getCalories()).multiply(servings));
+                totalPrice = totalPrice.add(BigDecimal.valueOf(item.getPrice()).multiply(servings));
+            }
         }
 
         totalProtein = roundBigDecimal(totalProtein);
