@@ -11,6 +11,8 @@ To-do:
   
 ## API Documentation
 
+### Get optimized diet
+
 `GET /api/v1/foods/optimize`
 
 #### Parameters
@@ -84,9 +86,82 @@ GET https://macro-saver.onrender.com/api/v1/foods/optimize?calories=1100&upperBo
             "servings": 0.5376344086021501
         },
 ```
+### Get all foods
+
+```http
+GET https://macro-saver.onrender.com/api/v1/foods
+
+[
+    {
+        "id": 174,
+        "name": "Fresh Red Cherries, 2.25 lb Bag",
+        "servings": 6,
+        "price": 5.56,
+        "calories": 87,
+        "protein": 2,
+        "carbs": 22,
+        "fats": 0,
+        "saturatedFat": 0.05,
+        "sodium": 0,
+        "addedSugars": 17.7,
+        "mealType": null,
+        "vendor": {
+            "id": 2,
+            "name": "Walmart"
+        }
+    },
+    ...
+]
+```
+
+### Get all foods under a certain price
+```http
+GET https://macro-saver.onrender.com/api/v1/foods/search?maxPrice=1.75
+
+[
+    {
+        "id": 196,
+        "name": "Great Value Natural Brown Long Grain Rice, 32 oz",
+        "servings": 20,
+        "price": 1.64,
+        "calories": 160,
+        "protein": 4,
+        "carbs": 34,
+        "fats": 2,
+        "saturatedFat": 0,
+        "sodium": 0,
+        "addedSugars": 0,
+        "mealType": null,
+        "vendor": {
+            "id": 2,
+            "name": "Walmart"
+        }
+    },
+    {
+        "id": 197,
+        "name": "Fresh Hass Avocados",
+        "servings": 3,
+        "price": 0.68,
+        "calories": 240,
+        "protein": 3,
+        "carbs": 13,
+        "fats": 22,
+        "saturatedFat": 3.19,
+        "sodium": 10,
+        "addedSugars": 1,
+        "mealType": null,
+        "vendor": {
+            "id": 2,
+            "name": "Walmart"
+        }
+    }
+]
+```
 
 #### Notes
 
-The result will stay fairly close to the target calories, but the algorithm needs some space to work with so it's common for the sum of the resulting food's calories to be ~100 calories off. 
+Algorithm used is Simplex for linear optimization.
+
+It's common for resulting calories to be ~100 calories off. 
 
 The app is opinionated to a 30/35/35 PCF split. 
