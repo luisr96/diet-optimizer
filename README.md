@@ -7,7 +7,6 @@ This API allows you to specify your target calories, and it will return a select
 To-do:
 * Add more food in the database that it can select from
 * Add tags like vegetarian, vegan, keto, etc. to filter for
-* Deal with weird rounding errors
   
 ## API Documentation
 
