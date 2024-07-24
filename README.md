@@ -27,63 +27,77 @@ To-do:
 GET https://macro-saver.onrender.com/api/v1/foods/optimize?calories=2300
 
 {
-    "dailyProtein": 172,
-    "dailyCarbs": 209.22,
-    "dailyFats": 96.41,
-    "dailyCalories": 2392.57,
+    "dailyProtein": 172.02,
+    "dailyCarbs": 209.1,
+    "dailyFats": 96.36,
+    "dailyCalories": 2391.72,
     "dailyPrice": 7.89,
     "selectedFoods": [
         {
             "foodName": "All Natural* 80% Lean/20% Fat Ground Beef Chuck, 2.25 lb Tray",
-            "servings": 1
+            "servings": 1,
+            "price": 1.18,
+            "calories": 280,
+            "protein": 19,
+            "carbs": 0,
+            "fats": 22,
+            "saturatedFat": 8,
+            "sodium": 75,
+            "addedSugars": 0,
+            "vendor": "Walmart"
         },
         {
             "foodName": "Freshness Guaranteed Fresh Chicken Drumsticks, 5 lb Bag",
-            "servings": 1
+            "servings": 1,
+            "price": 0.46,
+            "calories": 170,
+            "protein": 19,
+            "carbs": 0,
+            "fats": 10,
+            "saturatedFat": 2.5,
+            "sodium": 160,
+            "addedSugars": 0,
+            "vendor": "Walmart"
         },
-        {
-            "foodName": "Freshness Guaranteed Boneless Skinless Chicken Thighs, 2.75 - 4.0 lb Tray",
-            "servings": 1
-        },
-        {
-            "foodName": "Great Value Large White Eggs, 12 Count",
-            "servings": 1
-        },
-        {
-            "foodName": "Great Value Oats & Honey Granola, 11 oz",
-            "servings": 1
-        },
+        ...
 ```
 ```http
 GET https://macro-saver.onrender.com/api/v1/foods/optimize?calories=1100&upperBound=300&maxServings=2
 
 {
-    "dailyProtein": 82,
-    "dailyCarbs": 123.09,
-    "dailyFats": 44.92,
-    "dailyCalories": 1224.64,
+    "dailyProtein": 82.05,
+    "dailyCarbs": 123.05,
+    "dailyFats": 44.86,
+    "dailyCalories": 1224.14,
     "dailyPrice": 1.86,
     "selectedFoods": [
         {
             "foodName": "Freshness Guaranteed Fresh Chicken Drumsticks, 5 lb Bag",
-            "servings": 2
+            "servings": 2,
+            "price": 0.46,
+            "calories": 170,
+            "protein": 19,
+            "carbs": 0,
+            "fats": 10,
+            "saturatedFat": 2.5,
+            "sodium": 160,
+            "addedSugars": 0,
+            "vendor": "Walmart"
         },
         {
             "foodName": "Great Value Lentils, 4 lb",
-            "servings": 2
+            "servings": 2,
+            "price": 0.12,
+            "calories": 80,
+            "protein": 10,
+            "carbs": 22,
+            "fats": 0,
+            "saturatedFat": 0,
+            "sodium": 0,
+            "addedSugars": 0,
+            "vendor": "Walmart"
         },
-        {
-            "foodName": "Great Value Natural Brown Long Grain Rice, 32 oz",
-            "servings": 1.9999999999999998
-        },
-        {
-            "foodName": "Fresh Hass Avocados",
-            "servings": 0.8530465949820778
-        },
-        {
-            "foodName": "Boneless, Skinless Chicken Breasts, 4.7-6.1 lb Tray",
-            "servings": 0.5376344086021501
-        },
+        ...
 ```
 ### Get all foods
 
@@ -161,6 +175,6 @@ GET https://macro-saver.onrender.com/api/v1/foods/search?maxPrice=1.75
 
 Algorithm used is Simplex for linear optimization.
 
-It's common for resulting calories to be ~100 calories off. 
+It's common for resulting calories to be ~100 off target calories. 
 
 The app is opinionated to a 30/35/35 PCF split. 
