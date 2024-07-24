@@ -10,4 +10,13 @@ import lombok.NoArgsConstructor;
 public class SelectedFoodsDTO {
     private String foodName;
     private double servings;
+    private double price;
+    private int calories;
+    private int protein;
+    private int carbs;
+    private int fats;
+    private double saturatedFat;
+    private double sodium;
+    private double addedSugars;
+    private String vendor;
 }

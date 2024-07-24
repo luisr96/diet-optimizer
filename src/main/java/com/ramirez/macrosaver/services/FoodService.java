@@ -15,6 +15,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FoodService {
@@ -40,8 +41,13 @@ public class FoodService {
         return foodRepository.findByPriceLessThanEqual(price);
     }
 
+    public List<Food> getAllFoods() {
+        return foodRepository.findAll();
+    }
+
     public OptimizationResponseDTO optimizeFoodSelection(int targetCalories, int lowerBound, int upperBound, int maxServings) {
-        List<FoodItemDTO> foodItems = foodRepository.findAllAsDTO();
+        List<Food> foods = foodRepository.findAllWithVendors();
+        List<FoodItemDTO> foodItems = foods.stream().map(this::convertToDTO).collect(Collectors.toList());
         List<FoodItemDTO> normalizedFoodItems = normalizePrice(foodItems);
 
         // Objective function: minimize price
@@ -103,7 +109,8 @@ public class FoodService {
                         item.getFats(),
                         item.getSaturatedFat(),
                         item.getSodium(),
-                        item.getAddedSugars()
+                        item.getAddedSugars(),
+                        item.getVendor()
                 );
                 normalizedItems.add(normalizedItem);
             }
@@ -135,13 +142,26 @@ public class FoodService {
         for (int i = 0; i < foodItems.size(); i++) {
             System.out.println(foodItems.get(i).getName() + ": " + selectedQuantities[i]);
             BigDecimal servings = BigDecimal.valueOf(selectedQuantities[i]);
-            result.add(new SelectedFoodsDTO(foodItems.get(i).getName(), servings.doubleValue()));
+            FoodItemDTO item = foodItems.get(i);
+            result.add(new SelectedFoodsDTO(
+                    item.getName(),
+                    servings.doubleValue(),
+                    item.getPrice(),
+                    item.getCalories(),
+                    item.getProtein(),
+                    item.getCarbs(),
+                    item.getFats(),
+                    item.getSaturatedFat(),
+                    item.getSodium(),
+                    item.getAddedSugars(),
+                    item.getVendor()
+            ));
 
-            totalProtein = totalProtein.add(BigDecimal.valueOf(foodItems.get(i).getProtein()).multiply(servings));
-            totalCarbs = totalCarbs.add(BigDecimal.valueOf(foodItems.get(i).getCarbs()).multiply(servings));
-            totalFats = totalFats.add(BigDecimal.valueOf(foodItems.get(i).getFats()).multiply(servings));
-            totalCalories = totalCalories.add(BigDecimal.valueOf(foodItems.get(i).getCalories()).multiply(servings));
-            totalPrice = totalPrice.add(BigDecimal.valueOf(foodItems.get(i).getPrice()).multiply(servings));
+            totalProtein = totalProtein.add(BigDecimal.valueOf(item.getProtein()).multiply(servings));
+            totalCarbs = totalCarbs.add(BigDecimal.valueOf(item.getCarbs()).multiply(servings));
+            totalFats = totalFats.add(BigDecimal.valueOf(item.getFats()).multiply(servings));
+            totalCalories = totalCalories.add(BigDecimal.valueOf(item.getCalories()).multiply(servings));
+            totalPrice = totalPrice.add(BigDecimal.valueOf(item.getPrice()).multiply(servings));
         }
 
         totalProtein = roundBigDecimal(totalProtein);
@@ -161,7 +181,19 @@ public class FoodService {
         return value.setScale(2, RoundingMode.HALF_UP);
     }
 
-    public List<Food> getAllFoods() {
-        return foodRepository.findAll();
+    private FoodItemDTO convertToDTO(Food food) {
+        return new FoodItemDTO(
+                food.getName(),
+                food.getServings(),
+                food.getPrice(),
+                food.getCalories(),
+                food.getProtein(),
+                food.getCarbs(),
+                food.getFats(),
+                food.getSaturatedFat(),
+                food.getSodium(),
+                food.getAddedSugars(),
+                food.getVendor().getName()
+        );
     }
 }

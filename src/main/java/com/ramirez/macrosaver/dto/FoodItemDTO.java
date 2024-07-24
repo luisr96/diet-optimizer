@@ -21,4 +21,6 @@ public class FoodItemDTO {
     private Double saturatedFat;
     private Double sodium;
     private Double addedSugars;
+
+    private String vendor;
 }
